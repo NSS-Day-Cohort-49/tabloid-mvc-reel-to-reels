@@ -20,7 +20,7 @@ namespace TabloidMVC.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                       SELECT t.Name
+                       SELECT t.Name, t.Id
                          FROM Tag t
                         ORDER BY t.Name";
                     var reader = cmd.ExecuteReader();
