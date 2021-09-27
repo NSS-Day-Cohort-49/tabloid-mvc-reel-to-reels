@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<TabloidMVC.Models.Post>
 
 @{
-    ViewData["Title"] = "UserPosts";
+    ViewData["Title"] = "User Posts";
 }
 
 <h1>UserPosts</h1>
@@ -72,11 +72,11 @@
             @*<td>
                 @Html.DisplayFor(modelItem => item.UserProfileId)
             </td>*@
-            <td>
+            @*<td>
                 @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
                 @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
                 @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
+            </td>*@
         </tr>
 }
     </tbody>
