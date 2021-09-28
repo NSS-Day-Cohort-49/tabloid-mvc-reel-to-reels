@@ -26,8 +26,9 @@ namespace TabloidMVC.Repositories
                                 p.CreateDateTime, p.PublishDateTime, p.IsApproved,
                                 p.CategoryId, p.UserProfileId 
                         From Comment c
-                            LEFT JOIN UserProfile u ON c.UserProfileId = u.id
-                            LEFT JOIN Post p ON c.PostId = p.id";
+                            LEFT JOIN UserProfile u ON c.UserProfileId = u.Id
+                            LEFT JOIN Post p ON c.PostId = p.Id
+                        WHERE p.Id =  c.PostId";
                     var reader = cmd.ExecuteReader();
 
                     var comments = new List<Comment>();
