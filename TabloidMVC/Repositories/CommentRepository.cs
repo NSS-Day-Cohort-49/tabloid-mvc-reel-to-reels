@@ -28,7 +28,8 @@ namespace TabloidMVC.Repositories
                         From Comment c
                             LEFT JOIN UserProfile u ON c.UserProfileId = u.Id
                             LEFT JOIN Post p ON c.PostId = p.Id
-                        WHERE p.Id =  c.PostId";
+                        WHERE p.Id =  c.PostId
+                        ORDER By c.CreateDateTime DESC";
                     var reader = cmd.ExecuteReader();
 
                     var comments = new List<Comment>();
