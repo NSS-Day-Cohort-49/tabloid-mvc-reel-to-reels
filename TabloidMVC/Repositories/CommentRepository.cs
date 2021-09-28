@@ -11,7 +11,7 @@ namespace TabloidMVC.Repositories
     public class CommentRepository : BaseRepository, ICommentRepository
     {
         public CommentRepository(IConfiguration config) : base(config) { }
-        public List<Comment> GetPostComments()
+        public List<Comment> GetPostComments(int id)
         {
             using (var conn = Connection)
             {
@@ -28,8 +28,11 @@ namespace TabloidMVC.Repositories
                         From Comment c
                             LEFT JOIN UserProfile u ON c.UserProfileId = u.Id
                             LEFT JOIN Post p ON c.PostId = p.Id
-                        WHERE p.Id =  c.PostId
+                        WHERE c.PostId = @id
                         ORDER By c.CreateDateTime DESC";
+
+                    cmd.Parameters.AddWithValue("@id", id);
+
                     var reader = cmd.ExecuteReader();
 
                     var comments = new List<Comment>();

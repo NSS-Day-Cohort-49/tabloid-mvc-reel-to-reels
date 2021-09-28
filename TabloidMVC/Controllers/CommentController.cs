@@ -22,10 +22,17 @@ namespace TabloidMVC.Controllers
             _postRepository = postRepository;
             _commentRepository = commentRepository;
         }
-        public IActionResult Index()
+        [Route("comments/{id}")]
+        public IActionResult Index(int id)
         {
-            var comments = _commentRepository.GetPostComments();
-            return View(comments);
+            var comments = _commentRepository.GetPostComments(id);
+            var post = _postRepository.GetPublishedPostById(id);
+            var vm = new PostCommentViewModel
+            {
+                Comments = comments,
+                Post = post
+            };
+            return View(vm);
         }
     }
 }
