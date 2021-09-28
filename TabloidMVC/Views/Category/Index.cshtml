@@ -1,31 +1,23 @@
-﻿@model IEnumerable<TabloidMVC.Models.Post>
+﻿@model IEnumerable<TabloidMVC.Models.Category>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-
 <div class="container pt-5">
-    <h1>Posts</h1>
+    <h1>Index</h1>
 
     <p>
-        <a class="btn btn-primary" asp-action="Create">New Post</a>
+        <a class="btn btn-primary" asp-action="Create">Create New</a>
     </p>
     <table class="table table-striped">
         <thead>
-           
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.Title)
+                    @Html.DisplayNameFor(model => model.Id)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.UserProfileId)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.CategoryId)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.PublishDateTime)
+                    @Html.DisplayNameFor(model => model.Name)
                 </th>
                 <th></th>
             </tr>
@@ -35,16 +27,10 @@
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Title)
+                        @Html.DisplayFor(modelItem => item.Id)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.UserProfile.DisplayName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Category.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.PublishDateTime)
+                        @Html.DisplayFor(modelItem => item.Name)
                     </td>
                     <td>
                         <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-primary mx-1" title="View">
