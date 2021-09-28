@@ -8,6 +8,6 @@ namespace TabloidMVC.Repositories
 {
     public interface IPostReactionRepository
     {
-        List<PostReaction> GetPostReactionsByPostId();
+        List<PostReaction> GetPostReactionsByPostId(int postId);
     }
 }

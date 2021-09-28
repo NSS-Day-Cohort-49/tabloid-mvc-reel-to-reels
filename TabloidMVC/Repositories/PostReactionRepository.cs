@@ -14,16 +14,41 @@ namespace TabloidMVC.Repositories
         public PostReactionRepository(IConfiguration config) : base(config) { }
 
 
-        public List<PostReaction> GetPostReactionsByPostId()
+        public List<PostReaction> GetPostReactionsByPostId(int postId)
         {
-            var postReacations = new List<PostReaction>();
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"SELECT pr.Id, pr.PostId, pr.ReactionId, pr.UserProfileId, r.Name AS reactionName,
+                                        r.ImageLocation AS reactionImageLocation, r.Id AS reactionId, p.Title AS postTitle, p.Content AS postContent,
+                                        p.ImageLocation AS postImageLocation, p.Id AS postId
+                                        From PostReaction pr 
+                                        LEFT JOIN  Post p ON p.Id = pr.PostId 
+                                        LEFT JOIN Reaction r ON r.Id = pr.ReactionId
+                                        WHERE pr.PostId = @postId";
 
+                    cmd.Parameters.AddWithValue("@postId", postId);
+                    var reader = cmd.ExecuteReader();
 
-            return postReacations;
+                    var postReactions = new List<PostReaction>();
+
+                    while (reader.Read())
+                    {
+                        postReactions.Add(NewPostReactionFromReader(reader));
+                    }
+
+                    reader.Close();
+
+                    return postReactions;
+                }
+            }
+           
         }
 
 
-        private PostReaction NewReactionFromReader(SqlDataReader reader)
+        private PostReaction NewPostReactionFromReader(SqlDataReader reader)
         {
             return new PostReaction()
             {
@@ -31,6 +56,20 @@ namespace TabloidMVC.Repositories
                 PostId = reader.GetInt32(reader.GetOrdinal("PostId")),
                 ReactionId = reader.GetInt32(reader.GetOrdinal("ReactionId")),
                 UserProfileId = reader.GetInt32(reader.GetOrdinal("UserProfileId")),
+                //UserProfile = new UserProfile(),
+                Reaction = new Reaction()
+                {
+                    Id = reader.GetInt32(reader.GetOrdinal("reactionId")),
+                    Name = reader.GetString(reader.GetOrdinal("reactionName")),
+                    ImageLocation = reader.GetString(reader.GetOrdinal("reactionImageLocation"))
+                },
+                Post = new Post()
+                {
+                    Id = reader.GetInt32(reader.GetOrdinal("postId")),
+                    Title = reader.GetString(reader.GetOrdinal("postTitle")),
+                    Content = reader.GetString(reader.GetOrdinal("postContent")),
+                    ImageLocation = reader.GetString(reader.GetOrdinal("postImageLocation"))
+                }
 
             };
         }
