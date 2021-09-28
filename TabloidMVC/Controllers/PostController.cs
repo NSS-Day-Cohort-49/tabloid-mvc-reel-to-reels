@@ -100,6 +100,34 @@ namespace TabloidMVC.Controllers
             }
         }
 
+        //GET : PostController/Edit/5
+
+        public ActionResult Edit (int id)
+        {
+            int Id = GetCurrentUserProfileId();
+            Post post = _postRepository.GetUserPostById(id, Id);
+            if (post == null)
+            {
+                return NotFound();
+            }
+            return View(post);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(Post post)
+        {
+            try
+            {
+                _postRepository.UpdatePost(post);
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
         private int GetCurrentUserProfileId()
         {
             string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
