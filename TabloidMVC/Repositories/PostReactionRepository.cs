@@ -4,6 +4,8 @@ using TabloidMVC.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Data.SqlClient;
+using TabloidMVC.Utils;
 
 namespace TabloidMVC.Repositories
 {
@@ -18,6 +20,19 @@ namespace TabloidMVC.Repositories
 
 
             return postReacations;
+        }
+
+
+        private PostReaction NewReactionFromReader(SqlDataReader reader)
+        {
+            return new PostReaction()
+            {
+                Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                PostId = reader.GetInt32(reader.GetOrdinal("PostId")),
+                ReactionId = reader.GetInt32(reader.GetOrdinal("ReactionId")),
+                UserProfileId = reader.GetInt32(reader.GetOrdinal("UserProfileId")),
+
+            };
         }
     }
 }

@@ -4,6 +4,8 @@ using System.Linq;
 using TabloidMVC.Models;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Data.SqlClient;
+using TabloidMVC.Utils;
 
 namespace TabloidMVC.Repositories
 {
@@ -12,16 +14,41 @@ namespace TabloidMVC.Repositories
         public ReactionRepository(IConfiguration config) : base(config) { }
     
     
-        public List<Reaction> GetReactionByPostId()
+        public List<Reaction> GetAllReactions()
         {
 
-            var reactions = new List<Reaction>();
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"SELECT Id, [Name], ImageLocation FROM Reaction";
+                    var reader = cmd.ExecuteReader();
 
-            return reactions;
+                    var reactions = new List<Reaction>();
+
+                    while (reader.Read())
+                    {
+                        reactions.Add(NewReactionFromReader(reader));
+                    }
+
+                    reader.Close();
+
+                    return reactions;
+                }
+            }
         }
-    
-    
-    
-    
+
+        private Reaction NewReactionFromReader(SqlDataReader reader)
+        {
+            return new Reaction()
+            {
+                Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                Name = reader.GetString(reader.GetOrdinal("Name")),
+                ImageLocation = DbUtils.GetNullableString(reader, "ImageLocation"),
+
+            };
+        }
+   
     }
 }
