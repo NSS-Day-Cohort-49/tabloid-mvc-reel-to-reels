@@ -14,5 +14,11 @@ namespace TabloidMVC.Models
         public int ReactionId { get; set; }
 
         public int UserProfileId { get; set; }
+
+        public Post Post = new Post();
+
+        public Reaction Reaction = new Reaction();
+
+        public UserProfile UserProfile = new UserProfile();
     }
 }
