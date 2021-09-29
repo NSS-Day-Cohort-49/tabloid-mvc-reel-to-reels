@@ -69,6 +69,34 @@ namespace TabloidMVC.Repositories
             }
         }
 
+        public List<PostReaction> GetTotalReactionsByPost(int id, int reactionId)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"SELECT * FROM PostReaction WHERE @postId = postId AND @reactionId = id";
+
+                    cmd.Parameters.AddWithValue("@postId", id);
+                    cmd.Parameters.AddWithValue("@reactionId", reactionId);
+
+                    var reader = cmd.ExecuteReader();
+
+                    List<PostReaction> postReactions = new List<PostReaction>();
+
+                    while (reader.Read())
+                    {
+                        postReactions.Add(NewPostReactionFromReader(reader));
+                    }
+
+                    reader.Close();
+
+                    return postReactions;
+                }
+            }
+        }
+
 
         private PostReaction NewPostReactionFromReader(SqlDataReader reader)
         {
@@ -78,7 +106,7 @@ namespace TabloidMVC.Repositories
                 PostId = reader.GetInt32(reader.GetOrdinal("PostId")),
                 ReactionId = reader.GetInt32(reader.GetOrdinal("ReactionId")),
                 UserProfileId = reader.GetInt32(reader.GetOrdinal("UserProfileId")),
-                //UserProfile = new UserProfile(),
+               
                 Reaction = new Reaction()
                 {
                     Id = reader.GetInt32(reader.GetOrdinal("reactionId")),
