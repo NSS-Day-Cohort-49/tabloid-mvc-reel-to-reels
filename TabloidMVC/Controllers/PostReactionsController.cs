@@ -21,6 +21,26 @@ namespace TabloidMVC.Controllers
            
         }
         // GET: PostReactionsController
+
+        public Action AddReaction ()
+        {
+            PostReaction pr = new PostReaction()
+            {
+                PostId = postId,
+                ReactionId = reactionId,
+                UserProfileId = userProfileId
+            };
+            try
+            {
+                _postReactionRepository.AddNewReaction(pr);
+            }
+
+            catch
+            {
+
+            }
+        }
+       
         public ActionResult Index(int postId)
         {
             List<PostReaction> postReactions = _postReactionRepository.GetPostReactionsByPostId(postId);

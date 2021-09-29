@@ -39,16 +39,6 @@ namespace TabloidMVC.Controllers
             var reactions = _reactionRepository.GetAllReactions();
             var postReactions = _postReactionRepository.GetPostReactionsByPostId(id);
 
-            //if (post == null)
-            //{
-            //    int userId = GetCurrentUserProfileId();
-            //    post = _postRepository.GetUserPostById(id, userId);
-            //    if (post == null)
-            //    {
-            //        return NotFound();
-            //    }
-            //}
-
             PostDetailsViewModel vm = new PostDetailsViewModel()
             {
                 Reactions = reactions,
