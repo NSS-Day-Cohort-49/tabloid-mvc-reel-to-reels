@@ -14,5 +14,7 @@ namespace TabloidMVC.Models.ViewModels
         public List<PostTag> PostTags { get; set; }
 
         public List<Reaction> Reactions { get; set; }
+
+       
     }
 }

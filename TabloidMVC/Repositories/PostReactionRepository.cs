@@ -47,6 +47,28 @@ namespace TabloidMVC.Repositories
            
         }
 
+        public void AddNewReaction(PostReaction pr)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                                        INSERT INTO [PostReaction] ([PostId], [UserProfileId], [ReactionId]) VALUES (@postId, @userProfileId, @reactionId)
+                                        ";
+
+                    cmd.Parameters.AddWithValue("@postId", pr.PostId);
+                    cmd.Parameters.AddWithValue("@userProfileId", pr.UserProfileId);
+                    cmd.Parameters.AddWithValue("@reactionId", pr.ReactionId);
+
+                    cmd.ExecuteNonQuery();
+
+                    
+                }
+            }
+        }
+
 
         private PostReaction NewPostReactionFromReader(SqlDataReader reader)
         {

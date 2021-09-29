@@ -6,6 +6,8 @@ using System.Security.Claims;
 using TabloidMVC.Models;
 using TabloidMVC.Models.ViewModels;
 using TabloidMVC.Repositories;
+using System;
+using System.Collections.Generic;
 
 namespace TabloidMVC.Controllers
 {
@@ -15,12 +17,14 @@ namespace TabloidMVC.Controllers
         private readonly IPostRepository _postRepository;
         private readonly ICategoryRepository _categoryRepository;
         private readonly IPostReactionRepository _postReactionRepository;
+        private readonly IReactionRepository _reactionRepository;
 
-        public PostController(IPostRepository postRepository, ICategoryRepository categoryRepository, IPostReactionRepository postReactionRepository)
+        public PostController(IPostRepository postRepository, ICategoryRepository categoryRepository, IPostReactionRepository postReactionRepository, IReactionRepository reactionRepository)
         {
             _postRepository = postRepository;
             _categoryRepository = categoryRepository;
             _postReactionRepository = postReactionRepository;
+            _reactionRepository = reactionRepository;
         }
 
         public IActionResult Index()
@@ -32,16 +36,39 @@ namespace TabloidMVC.Controllers
         public IActionResult Details(int id)
         {
             var post = _postRepository.GetPublishedPostById(id);
-            if (post == null)
+            var reactions = _reactionRepository.GetAllReactions();
+            var postReactions = _postReactionRepository.GetPostReactionsByPostId(id);
+
+            PostDetailsViewModel vm = new PostDetailsViewModel()
             {
-                int userId = GetCurrentUserProfileId();
-                post = _postRepository.GetUserPostById(id, userId);
-                if (post == null)
-                {
-                    return NotFound();
-                }
+                Reactions = reactions,
+                PostReaction = postReactions,
+                Post = post,
+                PostTags = new List<PostTag>(),
+
+            };
+            return View(vm);
+        }
+
+        public IActionResult AddReaction(int id, [FromQuery]int reactionId)
+        {
+            PostReaction pr = new PostReaction()
+            {
+                PostId = id,
+                ReactionId = reactionId,
+                UserProfileId = GetCurrentUserProfileId(),
+            };
+            
+            try
+            {
+                _postReactionRepository.AddNewReaction(pr);
+                return RedirectToAction("Details", new {id});
             }
-            return View(post);
+
+            catch (Exception ex)
+            {
+                return StatusCode(500);  
+            }
         }
 
         public IActionResult UserPosts()
