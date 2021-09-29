@@ -54,9 +54,9 @@ namespace TabloidMVC.Repositories
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"SET IDENTITY_INSERT [PostReaction] ON
-                                        INSERT INTO [PostReaction] ([PostId], [UserProfileId], [ReactionId]) VALUES (@postId, @userProfileId, @reactionId;
-                                        SET IDENTITY_INSERT [PostReaction] OFF";
+                    cmd.CommandText = @"
+                                        INSERT INTO [PostReaction] ([PostId], [UserProfileId], [ReactionId]) VALUES (@postId, @userProfileId, @reactionId)
+                                        ";
 
                     cmd.Parameters.AddWithValue("@postId", pr.PostId);
                     cmd.Parameters.AddWithValue("@userProfileId", pr.UserProfileId);

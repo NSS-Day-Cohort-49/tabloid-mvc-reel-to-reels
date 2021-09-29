@@ -50,23 +50,24 @@ namespace TabloidMVC.Controllers
             return View(vm);
         }
 
-        public void AddReaction(int postId, int reactionId, int userProfileId)
+        public IActionResult AddReaction(int id, [FromQuery]int reactionId)
         {
             PostReaction pr = new PostReaction()
             {
-                PostId = postId,
+                PostId = id,
                 ReactionId = reactionId,
-                UserProfileId = userProfileId
+                UserProfileId = GetCurrentUserProfileId(),
             };
             
             try
             {
                 _postReactionRepository.AddNewReaction(pr);
+                return RedirectToAction("Details", new {id});
             }
 
-            catch
+            catch (Exception ex)
             {
-                Console.WriteLine("This did not work");  
+                return StatusCode(500);  
             }
         }
 
