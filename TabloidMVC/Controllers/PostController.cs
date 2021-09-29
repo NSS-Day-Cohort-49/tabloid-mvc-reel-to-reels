@@ -8,6 +8,7 @@ using TabloidMVC.Models.ViewModels;
 using TabloidMVC.Repositories;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace TabloidMVC.Controllers
 {
@@ -39,12 +40,20 @@ namespace TabloidMVC.Controllers
             var reactions = _reactionRepository.GetAllReactions();
             var postReactions = _postReactionRepository.GetPostReactionsByPostId(id);
 
+            var likes = postReactions.Where(n => n.PostId == id && n.ReactionId == 1);
+            var dislikes = postReactions.Where(n => n.PostId == id && n.ReactionId == 2);
+            var love = postReactions.Where(n => n.PostId == id && n.ReactionId == 3);
+
             PostDetailsViewModel vm = new PostDetailsViewModel()
             {
                 Reactions = reactions,
                 PostReaction = postReactions,
                 Post = post,
                 PostTags = new List<PostTag>(),
+                Likes = likes.Count(),
+                Dislikes = dislikes.Count(),
+                Love = love.Count()
+
 
             };
             return View(vm);
