@@ -1,0 +1,68 @@
+﻿@model TabloidMVC.Models.ViewModels.PostCommentViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>@Model.Post.Title</h1>
+
+
+<p>
+    <a class="btn btn-primary" asp-action="Create" asp-route-id="@Model.Post.Id" >Add Comment</a>
+</p>
+@{ var dummy = Model.Comments.FirstOrDefault();}
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => dummy.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => dummy.PostId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => dummy.UserProfileId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => dummy.Subject)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => dummy.Content)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => dummy.CreateDateTime)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Comments)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PostId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserProfileId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Subject)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Content)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreateDateTime)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
