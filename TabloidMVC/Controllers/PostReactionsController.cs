@@ -22,7 +22,7 @@ namespace TabloidMVC.Controllers
         }
         // GET: PostReactionsController
 
-        public Action AddReaction ()
+        public void AddReaction (int postId, int reactionId, int userProfileId)
         {
             PostReaction pr = new PostReaction()
             {
@@ -33,11 +33,12 @@ namespace TabloidMVC.Controllers
             try
             {
                 _postReactionRepository.AddNewReaction(pr);
+              
             }
 
             catch
             {
-
+                Console.WriteLine("This did not work");
             }
         }
        

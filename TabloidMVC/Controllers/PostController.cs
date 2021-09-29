@@ -50,6 +50,26 @@ namespace TabloidMVC.Controllers
             return View(vm);
         }
 
+        public void AddReaction(int postId, int reactionId, int userProfileId)
+        {
+            PostReaction pr = new PostReaction()
+            {
+                PostId = postId,
+                ReactionId = reactionId,
+                UserProfileId = userProfileId
+            };
+            
+            try
+            {
+                _postReactionRepository.AddNewReaction(pr);
+            }
+
+            catch
+            {
+                Console.WriteLine("This did not work");  
+            }
+        }
+
         public IActionResult UserPosts()
         {
             int UserProfileId = GetCurrentUserProfileId();
