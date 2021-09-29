@@ -45,8 +45,12 @@
                         <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-primary mx-1" title="Edit">
                             <i class="fas fa-pencil-alt"></i>
                         </a>
-                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-primary mx-1" title="Delete">
-                            <i class="fas fa-trash"></i>
+                        <a asp-action="@(item.ActiveUser == 1 ? "Deactivate" : "Activate")"
+                           asp-route-id="@item.Id"
+                           class="btn btn-outline-primary mx-1"
+                           title="@(item.ActiveUser == 1 ? "Deactivate" : "Activate")">
+
+                            <i class="@(item.ActiveUser == 1 ? "fas fa-toggle-on" : "fas fa-toggle-off")"></i>
                         </a>
                     </td>
                 </tr>
