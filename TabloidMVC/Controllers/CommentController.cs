@@ -34,5 +34,40 @@ namespace TabloidMVC.Controllers
             };
             return View(vm);
         }
+
+        public ActionResult Create(int id)
+        {
+            var post = _postRepository.GetPublishedPostById(id);
+            var vm = new CommentCreateFormViewModel
+            {
+                Post = post,
+                Comment = new Comment()
+            };
+            return View(vm);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(int id, CommentCreateFormViewModel commentCreateForm)
+        {
+            try
+            {
+                commentCreateForm.Comment.UserProfileId = GetCurrentUserProfileId();
+                commentCreateForm.Comment.PostId = id;
+                _commentRepository.Add(commentCreateForm.Comment);
+                return RedirectToAction("Index", new { id });
+            }
+            catch(Exception ex)
+            {
+                var post = _postRepository.GetPublishedPostById(id);
+                commentCreateForm.Post = post;
+                return View(commentCreateForm);
+            }
+        }
+        private int GetCurrentUserProfileId()
+        {
+            string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return int.Parse(id);
+        }
     }
 }
