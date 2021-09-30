@@ -172,17 +172,11 @@ namespace TabloidMVC.Repositories
                 conn.Open();
                 using (var cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = "SELECT count(Id) FROM PostTag WHERE TagId=@id And PostId=@postId";
+                    cmd.CommandText = @"INSERT INTO PostTag(TagId, PostId) 
+                                        VALUES(@id, @postId)";
                     cmd.Parameters.AddWithValue("@id", id);
                     cmd.Parameters.AddWithValue("@postId", postId);
-                    var tags = cmd.ExecuteScalar();
-
-                    if (Convert.ToInt32(tags) == 0)
-                    {
-                        cmd.CommandText = @"INSERT INTO PostTag(TagId, PostId) 
-                                        Values(@id, @postId)";
-                        cmd.ExecuteNonQuery();
-                    }
+                    cmd.ExecuteNonQuery();
 
                 }
                 conn.Close();
