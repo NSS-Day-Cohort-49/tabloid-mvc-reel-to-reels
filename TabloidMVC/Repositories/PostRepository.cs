@@ -260,7 +260,7 @@ namespace TabloidMVC.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                       SELECT p.Id as PostId, p.Title, p.Content, T.Id as TagId, T.Name
+                       SELECT p.Id as PostId, p.Title, T.Id as TagId, T.Name
                          FROM Post p 
                          LEFT JOIN PostTag pt on pt.PostId = p.Id
                          LEFT JOIN Tag T on pt.TagId = T.Id    
@@ -278,7 +278,6 @@ namespace TabloidMVC.Repositories
                             {
                                 PostId = reader.GetInt32(reader.GetOrdinal("PostId")),
                                 Title = reader.GetString(reader.GetOrdinal("Title")),
-                                //Content = reader.GetString(reader.GetOrdinal("Content")),
                                 PostTags = new List<Tag>()
                             };
                         }

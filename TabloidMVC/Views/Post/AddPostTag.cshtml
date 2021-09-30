@@ -19,8 +19,7 @@
                     <span asp-validation-for="PostId" class="text-danger"></span>
                 </div>
                 <div>
-                    <select asp-for="TagId"
-                            asp-items="@(new SelectList(Model.PostTags,"Id","Name"))">
+                    <select asp-for="TagId" asp-items="@(new SelectList(Model.PostTags,"Id","Name"))">
                         <option>Please select a tag</option>
                     </select>
                 </div>
