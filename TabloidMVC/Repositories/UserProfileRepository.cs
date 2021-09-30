@@ -72,7 +72,7 @@ u.ActiveUser
                     cmd.CommandText = @"
                        SELECT u.id, u.FirstName, u.LastName, u.DisplayName, u.Email,
                               u.CreateDateTime, u.ImageLocation, u.UserTypeId,
-                              ut.[Name] AS UserTypeName
+                              ut.[Name] AS UserTypeName, u.ActiveUser
                          FROM UserProfile u
                               LEFT JOIN UserType ut ON u.UserTypeId = ut.id
                         WHERE email = @email";
@@ -92,6 +92,7 @@ u.ActiveUser
                             DisplayName = reader.GetString(reader.GetOrdinal("DisplayName")),
                             CreateDateTime = reader.GetDateTime(reader.GetOrdinal("CreateDateTime")),
                             ImageLocation = DbUtils.GetNullableString(reader, "ImageLocation"),
+                            ActiveUser = reader.GetInt32(reader.GetOrdinal("ActiveUser")),
                             UserTypeId = reader.GetInt32(reader.GetOrdinal("UserTypeId")),
                             UserType = new UserType()
                             {

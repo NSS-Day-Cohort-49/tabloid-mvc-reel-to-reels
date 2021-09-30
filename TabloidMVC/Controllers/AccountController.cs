@@ -28,12 +28,12 @@ namespace TabloidMVC.Controllers
         {
             var userProfile = _userProfileRepository.GetByEmail(credentials.Email);
 
-            if (userProfile == null)
+            if (userProfile == null || userProfile.ActiveUser == 0)
             {
                 ModelState.AddModelError("Email", "Invalid email");
                 return View();
             }
-
+            
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, userProfile.Id.ToString()),
