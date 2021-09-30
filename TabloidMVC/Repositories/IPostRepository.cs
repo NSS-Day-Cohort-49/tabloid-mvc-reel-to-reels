@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using TabloidMVC.Models;
+using TabloidMVC.Models.ViewModels;
+
 
 namespace TabloidMVC.Repositories
 {
@@ -15,5 +17,8 @@ namespace TabloidMVC.Repositories
         void UpdatePost(Post post);
 
         List<Post> GetUserPosts(int UserProfileId);
+        PostManageTagsViewModel GetPostWithTags(int id);
+
+
     }
 }
