@@ -5,6 +5,7 @@ using System.Reflection.PortableExecutable;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using TabloidMVC.Models;
+using TabloidMVC.Models.ViewModels;
 using TabloidMVC.Utils;
 
 namespace TabloidMVC.Repositories
@@ -250,6 +251,45 @@ namespace TabloidMVC.Repositories
                 }
             }
         }
+
+        public PostManageTagsViewModel GetPostWithTags(int id)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                       SELECT p.Id as PostId, p.Title, T.Id as TagId, T.Name
+                         FROM Post p 
+                         LEFT JOIN PostTag pt on pt.PostId = p.Id
+                         LEFT JOIN Tag T on pt.TagId = T.Id    
+                        WHERE p.id = @id";
+
+                    cmd.Parameters.AddWithValue("@id", id);
+                    var reader = cmd.ExecuteReader();
+                    List<PostManageTagsViewModel> retValue = new();
+                    PostManageTagsViewModel post = null;
+                    if (reader.Read())
+                    {
+                        if (post == null)
+                        {
+                            post = new PostManageTagsViewModel
+                            {
+                                PostId = reader.GetInt32(reader.GetOrdinal("PostId")),
+                                Title = reader.GetString(reader.GetOrdinal("Title")),
+                                PostTags = new List<Tag>()
+                            };
+                        }
+                        reader.Close();
+                        return post;
+                    }
+                    return post;
+                }
+            }
+        }
+
+
 
         private Post NewPostFromReader(SqlDataReader reader)
         {

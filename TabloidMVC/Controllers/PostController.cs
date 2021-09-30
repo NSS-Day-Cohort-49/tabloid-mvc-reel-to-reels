@@ -19,13 +19,15 @@ namespace TabloidMVC.Controllers
         private readonly ICategoryRepository _categoryRepository;
         private readonly IPostReactionRepository _postReactionRepository;
         private readonly IReactionRepository _reactionRepository;
+        private readonly ITagRepository _tagRepository;
 
-        public PostController(IPostRepository postRepository, ICategoryRepository categoryRepository, IPostReactionRepository postReactionRepository, IReactionRepository reactionRepository)
+        public PostController(IPostRepository postRepository, ICategoryRepository categoryRepository, IPostReactionRepository postReactionRepository, IReactionRepository reactionRepository, ITagRepository tagRepository)
         {
             _postRepository = postRepository;
             _categoryRepository = categoryRepository;
             _postReactionRepository = postReactionRepository;
             _reactionRepository = reactionRepository;
+            _tagRepository = tagRepository;
         }
 
         public IActionResult Index()
@@ -170,6 +172,42 @@ namespace TabloidMVC.Controllers
         {
             string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
             return int.Parse(id);
+        }
+
+        public IActionResult ManageTags(int id)
+        {
+            PostManageTagsViewModel vm = _postRepository.GetPostWithTags(id);
+            vm.PostTags = _tagRepository.GetTagsByPost(id);
+            return View(vm);
+
+        }
+
+        public IActionResult AddPostTag(int postId)
+        {
+            List<Tag> tags = _tagRepository.GetAllTags();
+            PostManageTagsViewModel vm = new();
+            vm.PostId = postId;
+            vm.PostTags = tags;
+            return View(vm);
+        }
+
+        [HttpPost]
+        public IActionResult AddPostTag(PostManageTagsViewModel vm)
+        {
+            try
+            {
+                _tagRepository.AddPostTag(vm.TagId, vm.PostId);
+                return RedirectToAction("ManageTags", new { id = vm.PostId });
+            }
+            catch
+            {
+                return RedirectToAction("ManageTags", new { id = vm.PostId });
+            }
+        }
+        public IActionResult DeletePostTag(int Id, int PostId)
+        {
+            _tagRepository.DeletePostTag(Id, PostId);
+            return RedirectToAction("ManageTags", new { id = PostId });
         }
     }
 }
