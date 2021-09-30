@@ -157,6 +157,29 @@ u.ActiveUser
             }
         }
 
+        public void AddUserProfile(UserProfile userProfile)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"INSERT INTO 
+                                            UserProfile (
+                                                FirstName, LastName, Email, DisplayName, CreateDateTime, ImageLocation, ActiveUser, UserTypeId) 
+                                            OUTPUT INSERTED.ID VALUES (
+                                                @FirstName, @LastName, @Email, @DisplayName, GETDATE(), @ImageLocation, 1, 2)";
+                    cmd.Parameters.AddWithValue("@FirstName", userProfile.FirstName);
+                    cmd.Parameters.AddWithValue("@LastName", userProfile.LastName);
+                    cmd.Parameters.AddWithValue("@Email", userProfile.Email);
+                    cmd.Parameters.AddWithValue("@DisplayName", userProfile.DisplayName);
+                    cmd.Parameters.AddWithValue("@ImageLocation", DbUtils.ValueOrDBNull(userProfile.ImageLocation));
+
+                    userProfile.Id = (int)cmd.ExecuteScalar();
+                }
+            }
+        }
+
         public void DeactivateUserProfile(int userId)
         {
             using (var conn = Connection)

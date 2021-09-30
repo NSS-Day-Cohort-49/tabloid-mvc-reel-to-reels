@@ -45,10 +45,11 @@ namespace TabloidMVC.Controllers
         // POST: UserProfileController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(UserProfile userProfile)
         {
             try
             {
+                _userProfileRepository.AddUserProfile(userProfile);
                 return RedirectToAction(nameof(Index));
             }
             catch
