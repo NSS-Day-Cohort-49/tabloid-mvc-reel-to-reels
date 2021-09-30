@@ -35,6 +35,9 @@
                     @( Item.Id == 2 ? Model.Dislikes : "" )
                     @( Item.Id == 3 ? Model.Love : "" )
                 }
+                <a asp-action="ManageTags" asp-route-id="@Model.Post.Id" class="btn btn-outline-primary mx-1" title="Manage Tags">
+                    <i class="fas fa-tag"></i>
+                </a>
 
             </div>
         </section>
